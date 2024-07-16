@@ -1,0 +1,34 @@
+name: coke_cupa
+version: 1.0.0+1
+publish_to: none
+description: A new Flutter project.
+environment: 
+  sdk: '>=3.3.3 <4.0.0'
+
+dependencies: 
+  cupertino_icons: ^1.0.6
+  flutter_easyloading: ^3.0.5
+  flutter_screenutil: ^5.9.3
+  get_storage: ^2.1.1
+  get: 4.6.6
+  pin_code_fields: ^8.0.1
+  carousel_slider: ^4.2.1
+  shared_preferences: ^2.2.3
+  badges: ^2.0.2
+  cached_network_image: ^3.3.1
+  http: ^1.2.1
+  flutter: 
+    sdk: flutter
+  dots_indicator: ^3.0.0
+  loading_animation_widget: ^1.2.1
+
+dev_dependencies: 
+  flutter_lints: ^3.0.0
+  flutter_test: 
+    sdk: flutter
+
+flutter: 
+  uses-material-design: true
+  assets:
+    - assets/images/
+
