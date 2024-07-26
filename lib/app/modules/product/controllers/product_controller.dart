@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import '../../../routes/app_pages.dart';
 import '../../homepage/model/add_to_cart_model.dart';
 import '../../../../api/api/api_controller.dart';
 import '../model/updatecart.model.dart';
@@ -34,8 +35,8 @@ class ProductController extends GetxController {
   @override
   void onInit() {
     args=Get.arguments;
-    print("args---$args");
-    print("args---- ${args["main_image"]}");
+    // print("args---$args");
+    // print("args---- ${args["main_image"]}");
 if(args!=null){
   productDetails.value=Product.fromJson(args);
 }
@@ -73,6 +74,9 @@ if(args!=null){
     print("add to cart api res--${cartItems.toJson()}");
     cart.value = AddToCart.fromJson(cartItems.toJson());
     if (cart.value.success ?? false) {
+      Get.toNamed(
+        Routes.CART,
+      );
       EasyLoading.showSuccess(cart.value.message??"");
     }
   }

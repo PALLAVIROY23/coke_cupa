@@ -1,15 +1,12 @@
 
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:dots_indicator/dots_indicator.dart';
+import 'package:coke_cupa/constants/widgets/cachImage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 import '../../../../constants/widgets/Ratingbar.dart';
 import '../../../../constants/widgets/color.extension.dart';
-import '../../../routes/app_pages.dart';
 import '../controllers/product_controller.dart';
 
 class ProductView extends GetView<ProductController> {
@@ -52,13 +49,17 @@ class ProductView extends GetView<ProductController> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: CachedNetworkImage(
-                            imageUrl: controller.productDetails.value.mainImage ?? "",
-                            fit: BoxFit.fill,
-                          ),
+                          child:cacheImage( controller.productDetails.value.mainImage ?? "", null, null, BoxFit.contain)
+                          // CachedNetworkImage(
+                          //   imageUrl:,
+                          //   fit: BoxFit.fill,
+                          // ),
                         );
                       },
-                      options: carouselOptionsTopMobile(controllers: controller.dotIndex),
+                      options: carouselOptionsTopMobile(controllers: controller.dotIndex ,
+
+                      ),
+
                     ),
                   ),
                 ),
@@ -173,10 +174,7 @@ class ProductView extends GetView<ProductController> {
               InkWell(
                 onTap:(){
                   controller.addToCart(product_id: controller.productDetails.value.id! , quantity:  controller.count.value);
-                  print("addToCart-----${controller.addToCart(product_id: controller.productDetails.value.id!, quantity: controller.count.value)}");
-                  Get.toNamed(
-                    Routes.CART,
-                  );
+
                 } ,
                 child: Container(
                     height: Get.height*0.06,
@@ -203,10 +201,10 @@ CarouselOptions carouselOptionsTopMobile({RxInt? controllers}) {
     enlargeFactor: 0.1,
     viewportFraction: 0.99,  // Adjust viewport fraction to fit within the screen width
     enlargeCenterPage: true,
-    scrollPhysics: AlwaysScrollableScrollPhysics(),
+    scrollPhysics: const AlwaysScrollableScrollPhysics(),
     initialPage: 0,
     autoPlay: true,
-    autoPlayInterval: Duration(seconds: 3),
+    autoPlayInterval: const Duration(seconds: 3),
     onPageChanged: (index, reason) {
       controllers?.value = index;
     },

@@ -1,31 +1,31 @@
 // To parse this JSON data, do
 //
-//     final verifyotp = verifyotpFromJson(jsonString);
+//     final verifyOtp = verifyOtpFromJson(jsonString);
 
 import 'dart:convert';
 
-Verifyotp verifyotpFromJson(String str) => Verifyotp.fromJson(json.decode(str));
+VerifyOtp verifyOtpFromJson(String str) => VerifyOtp.fromJson(json.decode(str));
 
-String verifyotpToJson(Verifyotp data) => json.encode(data.toJson());
+String verifyOtpToJson(VerifyOtp data) => json.encode(data.toJson());
 
-class Verifyotp {
-  bool ?success;
-  Data ?data;
-  String ?accessToken;
-  String ?refreshToken;
-  String ?message;
+class VerifyOtp {
+  bool? success;
+  Data? data;
+  String? accessToken;
+  String? refreshToken;
+  String? message;
 
-  Verifyotp({
-     this.success,
-     this.data,
-     this.accessToken,
-     this.refreshToken,
-     this.message,
+  VerifyOtp({
+    this.success,
+    this.data,
+    this.accessToken,
+    this.refreshToken,
+    this.message,
   });
 
-  factory Verifyotp.fromJson(Map<String, dynamic> json) => Verifyotp(
+  factory VerifyOtp.fromJson(Map<String, dynamic> json) => VerifyOtp(
     success: json["success"],
-    data: Data.fromJson(json["data"]),
+    data: json["data"] == null ? null : Data.fromJson(json["data"]),
     accessToken: json["accessToken"],
     refreshToken: json["refreshToken"],
     message: json["message"],
@@ -41,44 +41,44 @@ class Verifyotp {
 }
 
 class Data {
-  int id;
-  String type;
-  String title;
-  String name;
-  String email;
-  int number;
-  String code;
+  int? id;
+  String? type;
+  String? title;
+  String? name;
+  String? email;
+  int? number;
+  String? code;
   dynamic emailVerifiedAt;
   dynamic passwordChangedAt;
-  int active;
-  String timezone;
+  int? active;
+  String? timezone;
   dynamic lastLoginAt;
-  String providerId;
-  String rememberToken;
-  String businessCode;
-  String internalCode;
-  int flag;
-  int testRecord;
+  String? providerId;
+  String? rememberToken;
+  String? businessCode;
+  String? internalCode;
+  int? flag;
+  int? testRecord;
 
   Data({
-    required this.id,
-    required this.type,
-    required this.title,
-    required this.name,
-    required this.email,
-    required this.number,
-    required this.code,
-    required this.emailVerifiedAt,
-    required this.passwordChangedAt,
-    required this.active,
-    required this.timezone,
-    required this.lastLoginAt,
-    required this.providerId,
-    required this.rememberToken,
-    required this.businessCode,
-    required this.internalCode,
-    required this.flag,
-    required this.testRecord,
+    this.id,
+    this.type,
+    this.title,
+    this.name,
+    this.email,
+    this.number,
+    this.code,
+    this.emailVerifiedAt,
+    this.passwordChangedAt,
+    this.active,
+    this.timezone,
+    this.lastLoginAt,
+    this.providerId,
+    this.rememberToken,
+    this.businessCode,
+    this.internalCode,
+    this.flag,
+    this.testRecord,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(

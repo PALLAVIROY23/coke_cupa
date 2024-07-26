@@ -16,13 +16,10 @@ extension CartExtension on ApiController {
       // EasyLoading.show(status: "Loading...");
       final response = await httpClient.get(AppUrl.getUserCart);
 
-
       if (response.statusCode == 200) {
-        print("home cart api");
         // EasyLoading.dismiss();
         print("status code of cart api ${response.body}");
-        return GetUserFromCart.fromJson(response.body
-            );
+        return GetUserFromCart.fromJson(response.body);
       } else {
         print('Request failed with status: ${response.statusCode}');
         // Handle error appropriately...

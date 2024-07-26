@@ -24,7 +24,7 @@ extension HomeExtension on ApiController {
     }
   }
 
-  Future<Verifyotp> verifyOtp(String email, String otp) async {
+  Future<VerifyOtp> verifyOtpApi(String email, String otp) async {
     try {
       EasyLoading.show(status: "Loading");
       var res = await httpClient.post(AppUrl.otpVerify,
@@ -32,7 +32,7 @@ extension HomeExtension on ApiController {
       print(res.body);
       if (res.statusCode == 200) {
         EasyLoading.dismiss();
-        Verifyotp verifyOtp = Verifyotp.fromJson(res.body);
+        var verifyOtp = VerifyOtp.fromJson(res.body);
         return verifyOtp;
       } else {
         EasyLoading.dismiss();
@@ -43,6 +43,6 @@ extension HomeExtension on ApiController {
       print(e.toString());
     }
 
-    return Verifyotp();
+    return VerifyOtp();
   }
 }

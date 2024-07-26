@@ -34,186 +34,191 @@ class HomepageView extends GetView<HomepageController> {
 
         print(controller.count.value);
 
-        return SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Stack(
-                fit: StackFit.loose,
-                children: [
-                  Container(
-                    height: Get.height * 0.4,
-                    width: Get.width,
-                    padding: const EdgeInsets.all(10),
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage("assets/images/Ellipse 2.png"),
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Container(
-                        margin: const EdgeInsets.only(bottom: 200),
-                        child: Image.asset(
-                          "assets/images/splash (2).png",
-                          height: 80,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 50),
-                    child: IconButton(
-                      onPressed: () async {
-                        GetStorage box = GetStorage();
-                        await box.remove(Contanst.TOKEN);
-                        Get.offAllNamed(Routes.LOGIN);
-                      },
-                      icon: const Icon(Icons.logout),
-                      color: Colors.white,
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 70, horizontal: 10),
-                        child: InkWell(
-                          onTap: ()async {
-                            var removeData= await Get.toNamed(Routes.CART);
-                            if(removeData!=null){
-                              controller.count.value=removeData;
-                              controller.count.refresh();
-                              controller.update();
-
-                            }
-                          },
-                          child: Obx(() => badges.Badge(
-                            badgeContent: Text(
-                              "${controller.count.value}",
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                            child: const CircleAvatar(
-                              child: ImageIcon(AssetImage("assets/images/ion_cart.png")),
-                            ),
-                          )),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      const SizedBox(
-                        height: 180,
-                      ),
-                      (controller.banners.value.data?.rows?.isNotEmpty ?? false)
-                          ? Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: CarouselSlider(
-                          options: CarouselOptions(
-                            onPageChanged: (index, reason) {
-                              controller.dotPosition.value = index;
-                            },
-                            height: 200.0,
-                            autoPlay: true,
-                            viewportFraction: 16 / 9,
-                          ),
-                          items: controller.banners.value.data?.rows?.map((i) {
-                            String imageUrl = i.url ?? "";
-                            if (imageUrl.isEmpty) {
-                              imageUrl = "assets/images/amazon.png";
-                            }
-                            return Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20), // Change the radius as needed
-                              ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(20), // Match the border radius here
-                                child: Image(
-                                  image: NetworkImage(imageUrl),
-                                  fit: BoxFit.cover, // Adjust the image fit as needed
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                      )
-                          : const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                      const SizedBox(height: 20),
-                      Obx(() => DotsIndicator(
-                        dotsCount: controller.banners.value.data?.rows?.length ?? 1,
-                        position: controller.dotPosition.value,
-                        decorator: DotsDecorator(
-                          size: const Size.square(9.0),
-                          activeSize: const Size(18.0, 9.0),
-                          activeShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-                        ),
-                      )),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 25),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Stack(
+        return RefreshIndicator(
+          onRefresh: () async{
+          controller.banners.value.data!.rows != null;
+          },
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Stack(
+                  fit: StackFit.loose,
                   children: [
-                    Image.asset("assets/images/Frame 1.png"),
-                    Positioned(
-                      right: 55,
-                      bottom: 20,
-                      child: InkWell(
-                        onTap: () {
-                          Get.toNamed(Routes.ORDERSUMMARY);
-                        },
-                        child: Text(
-                          "Order Summary",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                            color: HexColor.fromHex("#FFFFFF"),
+                    Container(
+                      height: Get.height * 0.4,
+                      width: Get.width,
+                      padding: const EdgeInsets.all(10),
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage("assets/images/Ellipse 2.png"),
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          margin: const EdgeInsets.only(bottom: 200),
+                          child: Image.asset(
+                            "assets/images/splash (2).png",
+                            height: 80,
                           ),
                         ),
                       ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 50),
+                      child: IconButton(
+                        onPressed: () async {
+                          GetStorage box = GetStorage();
+                          await box.remove(Contanst.TOKEN);
+                          Get.offAllNamed(Routes.LOGIN);
+                        },
+                        icon: const Icon(Icons.logout),
+                        color: Colors.white,
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 70, horizontal: 10),
+                          child: InkWell(
+                            onTap: ()async {
+                              var removeData= await Get.toNamed(Routes.CART);
+                              if(removeData!=null){
+                                controller.count.value=removeData;
+                                controller.count.refresh();
+                                controller.update();
+
+                              }
+                            },
+                            child: Obx(() => badges.Badge(
+                              badgeContent: Text(
+                                "${controller.count.value}",
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                              child: const CircleAvatar(
+                                child: ImageIcon(AssetImage("assets/images/ion_cart.png")),
+                              ),
+                            )),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        const SizedBox(
+                          height: 180,
+                        ),
+                        (controller.banners.value.data?.rows?.isNotEmpty ?? false)
+                            ? Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: CarouselSlider(
+                            options: CarouselOptions(
+                              onPageChanged: (index, reason) {
+                                controller.dotPosition.value = index;
+                              },
+                              height: 200.0,
+                              autoPlay: true,
+                              viewportFraction: 16 / 9,
+                            ),
+                            items: controller.banners.value.data?.rows?.map((i) {
+                              String imageUrl = i.url ?? "";
+                              if (imageUrl.isEmpty) {
+                                imageUrl = "assets/images/amazon.png";
+                              }
+                              return Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20), // Change the radius as needed
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20), // Match the border radius here
+                                  child: Image(
+                                    image: NetworkImage(imageUrl),
+                                    fit: BoxFit.cover, // Adjust the image fit as needed
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        )
+                            : const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                        const SizedBox(height: 20),
+                        Obx(() => DotsIndicator(
+                          dotsCount: controller.banners.value.data?.rows?.length ?? 1,
+                          position: controller.dotPosition.value,
+                          decorator: DotsDecorator(
+                            size: const Size.square(9.0),
+                            activeSize: const Size(18.0, 9.0),
+                            activeShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+                          ),
+                        )),
+                      ],
                     ),
                   ],
                 ),
-              ),
-              const SizedBox(height: 15),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Catalogue",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 17.89,
-                        color: HexColor.fromHex("#000000"),
+                const SizedBox(height: 25),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Stack(
+                    children: [
+                      Image.asset("assets/images/Frame 1.png"),
+                      Positioned(
+                        right: 55,
+                        bottom: 20,
+                        child: InkWell(
+                          onTap: () {
+                            Get.toNamed(Routes.ORDERSUMMARY);
+                          },
+                          child: Text(
+                            "Order Summary",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              color: HexColor.fromHex("#FFFFFF"),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Get.toNamed(Routes.CATALOGUE);
-                      },
-                      child: Text(
-                        "View all",
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 15),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Catalogue",
                         style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 13.92,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 17.89,
                           color: HexColor.fromHex("#000000"),
                         ),
                       ),
-                    ),
-                  ],
+                      InkWell(
+                        onTap: () {
+                          Get.toNamed(Routes.CATALOGUE,);
+                        },
+                        child: Text(
+                          "View all",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 13.92,
+                            color: HexColor.fromHex("#000000"),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              remainBody()
-            ],
+                remainBody()
+              ],
+            ),
           ),
         );
       }),
@@ -226,7 +231,6 @@ class HomepageView extends GetView<HomepageController> {
         child: CircularProgressIndicator(),
       );
     }
-
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),

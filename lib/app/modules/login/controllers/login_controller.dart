@@ -16,7 +16,7 @@ class LoginController extends GetxController {
   LoginController({required this.apiController});
 
   var loginModel = Login().obs;
-  var verifyModel = Verifyotp().obs;
+  var verifyModel = VerifyOtp().obs;
   final count = 0.obs;
 
 
@@ -59,7 +59,7 @@ class LoginController extends GetxController {
   }
 
 
-  void verifyOtpControl(String otp) {
+   verifyOtpControl(String otp) {
     if (pin.text.isEmpty) {
       EasyLoading.showError('Please Enter your otp');
     } else if (pin.text.length < 5) {
@@ -70,15 +70,17 @@ class LoginController extends GetxController {
   }
 
   Submit() async {
-    var response = await apiController.verifyOtp(emailController.text, pin.text);
+    var response = await apiController.verifyOtpApi(emailController.text, pin.text);
+
+    print("success msg-------${response.success}");
+    print("response message------${response.message}");
     if (response.success == true) {
-      EasyLoading.showSuccess("${response.message}");
       await apiController.getStorage.write("token", response.accessToken);
       verifyModel.value = response;
       EasyLoading.showSuccess("${response.message}");
       Get.offAllNamed(Routes.HOMEPAGE);
     }else{
-      EasyLoading.showError("OTP is Invalid");
+      EasyLoading.showError("${response.message}");
     }
 
   }

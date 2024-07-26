@@ -31,6 +31,8 @@ class AppPages {
     GetPage(
       name: _Paths.PRODUCT,
       page: () => const ProductView(),
+      fullscreenDialog: true,
+      transition: Transition.leftToRightWithFade,
       binding: ProductBinding(),
     ),
     GetPage(
@@ -46,6 +48,7 @@ class AppPages {
     GetPage(
       name: _Paths.ORDERSUMMARY,
       page: () => const OrdersummaryView(),
+      transition: Transition.downToUp,
       binding: OrdersummaryBinding(),
     ),
     GetPage(
@@ -56,11 +59,16 @@ class AppPages {
     GetPage(
       name: _Paths.CART,
       page: () => const CartView(),
+      transition: Transition.zoom,
+      //transitionDuration: Duration(seconds: 10),
       binding: CartBinding(),
     ),
     GetPage(
       name: _Paths.CATALOGUE,
       page: () => const CatalogueView(),
+      transition: Transition.leftToRightWithFade,
+      popGesture: true,
+      customTransition: null,
       binding: CatalogueBinding(),
     ),
 

@@ -16,7 +16,8 @@ class CustomTextField extends StatelessWidget {
     this.ValidationErrorMessage,
     required this.width,
     this.controller,
-    required this.TextInputAction,
+
+
     required this.keyboardType,
     required this.obscureText,
     required this.isOutlineInputBorder,

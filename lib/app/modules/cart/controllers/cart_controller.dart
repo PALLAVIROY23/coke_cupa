@@ -1,5 +1,6 @@
 import 'package:coke_cupa/app/modules/cart/extensions/cart_extensions.dart';
 import 'package:coke_cupa/app/modules/product/extensions/product_extensions.dart';
+import 'package:coke_cupa/constants/widgets/debouncer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -24,23 +25,19 @@ class CartController extends GetxController {
   var productID = 1.obs;
   var cartCount = 0.obs;
   var quantity = 0.obs;
+ Debouncer debouncer = Debouncer(milliseconds: 500);
 
 
   @override
   void onInit() {
     getCart();
+
     super.onInit();
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
+
+
 
   void increment() => count.value++;
 
@@ -48,15 +45,22 @@ class CartController extends GetxController {
   void decrement() {}
 
   getCart() async {
-    getUserCart.value = await apiController.getCartApi();
 
-    print("get Cart---${getUserCart.value.toJson()}");
-    if (getUserCart.value.success ?? false) {
-      // products.value = ;
-      getUserCart.value = getUserCart.value;
-      print("cart-----${getUserCart.value.toJson()}");
-    } else {
-      EasyLoading.showError("No Data Found");
+    try {
+      getUserCart.value = await apiController.getCartApi();
+
+      print("get Cart---${getUserCart.value.toJson()}");
+      if (getUserCart.value.success ?? false) {
+        getUserCart.value = getUserCart.value;
+        getUserCart.refresh();
+        update();
+        print("cart-----${getUserCart.value.toJson()}");
+      } else {
+        EasyLoading.showError("No Data Found");
+      }
+    }catch(e){
+      EasyLoading.showError("$e");
+
     }
   }
 
@@ -92,10 +96,9 @@ class CartController extends GetxController {
     }).toList();
 
     if (orderData == null || orderData.isEmpty) {
-      Get.back(); // Close the loading indicator
-      Get.snackbar(
-          "Error", "Your cart is empty. Add some items to place an order.",
-          snackPosition: SnackPosition.BOTTOM);
+      Get.back();
+      EasyLoading.showInfo( "Your cart is empty. Add some items to place an order.",);
+
       return;
     }
 
@@ -201,11 +204,17 @@ class CartController extends GetxController {
     }
   }
 
-  // removeFromCart({required int product_id}) {
-  //   if (cartCount.value > 0) {
-  //     cartCount.value--;
-  //   }
-  // }
+  addToCart({required int product_id,required int quantity}) async {
+    var cartItems = await apiController.addToCart(productId: product_id, quantity: quantity);
+    print("add to cart api res--${cartItems.toJson()}");
+    cart.value = AddToCart.fromJson(cartItems.toJson());
+    if (cart.value.success ?? false) {
+      count.value++;
+
+      EasyLoading.showSuccess(cart.value.message??"");
+
+    }
+  }
 
 
 }

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'dart:async';
 
 import '../../../../constants/widgets/customtextfield.dart';
 import '../../../../constants/widgets/mybutton.dart';
@@ -12,6 +11,7 @@ import '../controllers/login_controller.dart';
 
 class LoginView extends GetView<LoginController> {
   const LoginView({super.key});
+
   @override
   Widget build(BuildContext context) {
     SizeConfig.init(context);
@@ -83,7 +83,7 @@ class LoginView extends GetView<LoginController> {
                                 HintText: "Enter Email Id",
                                 Radius: 0,
                                 width: Get.width,
-                                TextInputAction: TextInputAction.go,
+
                                 keyboardType: TextInputType.text,
                                 obscureText: false,
                                 isOutlineInputBorder: true,
@@ -173,42 +173,48 @@ class LoginView extends GetView<LoginController> {
                     ),
                     SizedBox(height: 15.h),
                     Center(
-                      child: Text(
-                        "Enter Otp",
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w600,
-                          color: HexColor.fromHex("#000000"),
+                      child: Obx(
+                            () => Text(
+                          "Enter Otp",
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w600,
+                            color: HexColor.fromHex("#000000"),
+                            decoration: controller.isSendOtp.value ? TextDecoration.none : TextDecoration.lineThrough,
+                          ),
                         ),
                       ),
                     ),
                     SizedBox(height: 15.h),
-                    PinCodeTextField(
-                      controller: controller.pin,
-                      appContext: context,
-                      length: 5,
-                      obscureText: false,
-                      keyboardType: TextInputType.number,
-                      pinTheme: PinTheme(
-                        shape: PinCodeFieldShape.box,
-                        borderRadius: BorderRadius.circular(5),
-                        fieldHeight: Get.height * 0.06,
-                        fieldWidth: Get.width * 0.16,
-                        inactiveFillColor: Colors.grey[200],
-                        activeFillColor: Colors.white,
-                        activeColor: Colors.black,
-                        selectedColor: Colors.black,
-                        inactiveColor: Colors.grey,
+                    Obx(
+                          () => PinCodeTextField(
+                        controller: controller.pin,
+                        appContext: context,
+                        length: 5,
+                        obscureText: false,
+                        keyboardType: TextInputType.number,
+                        enabled: controller.isSendOtp.value,
+                        pinTheme: PinTheme(
+                          shape: PinCodeFieldShape.box,
+                          borderRadius: BorderRadius.circular(5),
+                          fieldHeight: Get.height * 0.06,
+                          fieldWidth: Get.width * 0.16,
+                          inactiveFillColor: Colors.grey[200],
+                          activeFillColor: Colors.white,
+                          activeColor: Colors.black,
+                          selectedColor: Colors.black,
+                          inactiveColor: Colors.grey,
+                        ),
+                        onChanged: (value) {
+                          controller.updatePin(value);
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter OTP';
+                          }
+                          return null;
+                        },
                       ),
-                      onChanged: (value) {
-                        controller.updatePin(value);
-                      },
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter OTP';
-                        }
-                        return null;
-                      },
                     ),
                     SizedBox(height: 15.h),
                     Obx(
@@ -238,17 +244,21 @@ class LoginView extends GetView<LoginController> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Obx(
-                            () => InkWell(
-                          onTap: () {
-                            controller.verifyOtpControl(controller.pin.text);
-                            controller.Submit();
-                            print("verify otp");
-                          },
-                          child: button(
-                            "Submit",
-                            controller.isSendOtp.value
-                                ? const Color(0xFFEB2A2E)
-                                : const Color(0xFFD0D0D0),
+                            () => IgnorePointer(
+                          ignoring: !controller.isSendOtp.value,
+                          child: InkWell(
+                            onTap: () {
+                              controller.verifyOtpControl(controller.pin.text);
+
+                              print("verify otp");
+                            },
+                            child: button(
+                              "Submit",
+                              textcolor: HexColor.fromHex("#F9F9F9"),
+                              controller.isSendOtp.value
+                                  ? const Color(0xFFEB2A2E)
+                                  : const Color(0xFFD0D0D0),
+                            ),
                           ),
                         ),
                       ),
@@ -277,45 +287,3 @@ Widget myButton(String text, Color color, {Color? textcolor}) {
     ),
   );
 }
-
-// Controller
-// class LoginController extends GetxController {
-//   var emailController = TextEditingController();
-//   var pin = TextEditingController();
-//   var isSendOtp = false.obs;
-//   var isChecked = false.obs;
-//   var pinFilled = false.obs;
-//   var canResendOtp = true.obs;
-//   var countdown = 0.obs;
-//
-//   void updatePin(String value) {
-//     pinFilled.value = value.length == 5;
-//   }
-//
-//   void login() {
-//     // Your login logic here
-//     isSendOtp.value = true;
-//   }
-//
-//   void verifyOtpControl(String otp) {
-//     // Your OTP verification logic here
-//   }
-//
-//   void Submit() {
-//     // Your submit logic here
-//   }
-//
-//   void resendOtp() {
-//     canResendOtp.value = false;
-//     countdown.value = 30;
-//     Timer.periodic(const Duration(seconds: 1), (timer) {
-//       if (countdown.value == 0) {
-//         canResendOtp.value = true;
-//         timer.cancel();
-//       } else {
-//         countdown.value--;
-//       }
-//     });
-//     // Your resend OTP logic here
-//   }
-// }

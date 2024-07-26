@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 
 import '../../../../api/api/api_controller.dart';
@@ -42,7 +43,7 @@ class HomepageController extends GetxController {
 
   @override
   void onInit() async {
-    // token.value = await GetStorage().read("token");
+   // token.value = await GetStorage().read("token");
     getCart();
     getAllBanner();
      getAllProduct();

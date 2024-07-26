@@ -3,20 +3,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-
 Widget cacheImage(String url, double? height, double? width, BoxFit? fit,
     {BoxShape shape = BoxShape.rectangle,
     BorderRadius? borderRadius,
     double scale = 1.0,
     Color? bgcolor = Colors.transparent,
     Border? border,
-    
     Widget? errorwidget,
     Map<String, String>? header}) {
   return CachedNetworkImage(
     httpHeaders: header,
-    imageUrl:
-        "https://takseservicemall.s3.ap-south-1.amazonaws.com/static/$url",
+    imageUrl: url,
     imageBuilder: (context, imageProvider) => Container(
         height: height,
         width: width,
@@ -45,16 +42,15 @@ Widget cacheImage(String url, double? height, double? width, BoxFit? fit,
         border: Border.all(color: Colors.grey),
       ),
       padding: const EdgeInsets.all(5),
-
     ),
     errorWidget: (context, url, error) => Container(
       height: height,
       width: width,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        border: Border.all(color: Colors.grey),
+        // border: Border.all(color: Colors.grey),
       ),
-      child: errorwidget ?? Image.asset("assets/images/nophoto.png"),
+      child: errorwidget ?? Image.asset("assets/images/amazon.png"),
     ),
   );
 }
